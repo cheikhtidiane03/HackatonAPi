@@ -11,4 +11,7 @@ FROM tomcat:10.1-jdk17
 RUN rm -rf /usr/local/tomcat/webapps/*
 # Déployé comme ROOT.war -> pas de préfixe de contexte, endpoints sur /api/... directement
 COPY --from=build /app/target/hackathon-backend.war /usr/local/tomcat/webapps/ROOT.war
+# Désactive le port d'arrêt interne (8005) — évite toute confusion avec les
+# health checks externes (Render, etc.), et empêche un arrêt distant non authentifié
+RUN sed -i 's/port="8005"/port="-1"/' /usr/local/tomcat/conf/server.xml
 EXPOSE 8080
