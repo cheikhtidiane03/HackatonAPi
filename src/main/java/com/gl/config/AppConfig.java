@@ -57,9 +57,7 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/swagger-ui/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/")
-                .resourceChain(false)
-                .addResolver(new WebJarsResourceResolver());
+                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/5.32.11/");
     }
 
     @Bean
