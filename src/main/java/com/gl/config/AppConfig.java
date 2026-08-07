@@ -38,8 +38,7 @@ public class AppConfig implements WebMvcConfigurer {
     private String dbUsername;
     @Value("${db.password}")
     private String dbPassword;
-    @Value("${hibernate.dialect}")
-    private String hibernateDialect;
+
     @Value("${hibernate.show_sql}")
     private String hibernateShowSql;
     @Value("${hibernate.hbm2ddl.auto}")
@@ -96,7 +95,6 @@ public class AppConfig implements WebMvcConfigurer {
     private Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
-        properties.setProperty("hibernate.dialect", hibernateDialect);
         properties.setProperty("hibernate.show_sql", hibernateShowSql);
         return properties;
     }

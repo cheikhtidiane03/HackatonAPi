@@ -1,0 +1,43 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: hackathon_db
+      MYSQL_USER: hackathon_user
+      MYSQL_PASSWORD: hackathon_pwd
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./hackathon-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/hackathon_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: hackathon_user
+      DB_PASSWORD: hackathon_pwd
+      ALLOWED_ORIGINS: http://localhost:4200
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./hackathon-frontend
+      args:
+        API_URL: http://localhost:8080/api
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  mysql_data:
